@@ -1,0 +1,239 @@
+﻿@model EntityLayer.Concrete.Product
+@{
+    ViewBag.Title = "Ürün Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5; /* Arka plan rengini güncelle */
+        }
+
+        #container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff; /* Formun arka plan rengini beyaz yap */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti ekle */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group {
+            flex: 1 1 calc(33.333% - 20px); /* 3 alan için uygun genişlik */
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px; /* Input paddingini artır */
+            border: 1px solid #ccc; /* Input kenarlık rengini güncelle */
+            border-radius: 5px; /* Kenarları yuvarla */
+            background-color: #fafafa; /* Input arka plan rengini güncelle */
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px; /* Butonun üstüne biraz boşluk ekle */
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+    </style>
+    <script>
+        function validateForm() {
+            var productName = document.getElementById("ProductName").value;
+            var brand = document.getElementById("Brand").value;
+            if (productName === "" || brand === "") {
+                alert("Lütfen zorunlu alanları doldurunuz.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="container" id="container">
+        <h1>@ViewBag.Title</h1>
+        <br />
+        @using (Html.BeginForm("CreateProduct", "Product", FormMethod.Post, new { onsubmit = "return validateForm()" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Ürün İsmi", new { @class = "required" })
+                    @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", id = "ProductName" })
+                    @Html.ValidationMessageFor(model => model.ProductName)
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Marka", new { @class = "required" })
+                    @Html.TextBoxFor(model => model.Brand, new { @class = "form-control", id = "Brand" })
+                    @Html.ValidationMessageFor(model => model.Brand)
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Marka Geçmişi")
+                    @Html.TextBoxFor(model => model.BrandHistory, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BrandHistory)
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Ruhsat Durumu")
+                    @Html.DropDownList("LicenseStatus", new SelectList(new[] { "Ruhsatlı", "Ruhsatsız" }), "Seçin", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Tescil Durumu")
+                    @Html.DropDownList("RegisterStatus", new SelectList(new[] { "Tescilli", "Tescilsiz" }), "Seçin", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Modül Tipi")
+                    @Html.TextBoxFor(model => model.ModulTipi, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Etkin Madde")
+                    @Html.TextBoxFor(model => model.EtkinMadde, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Doz")
+                    @Html.TextBoxFor(model => model.Doz, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Farmasötik Form")
+                    @Html.TextBoxFor(model => model.FarmasotikForm, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("SGK Durumu")
+                    @Html.TextBoxFor(model => model.SgkDurumu, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Satış İzni")
+                    @Html.TextBoxFor(model => model.SatisIzni, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("TİTCK Birim")
+                    @Html.TextBoxFor(model => model.TitckBirim, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Yazı Konusu")
+                    @Html.TextBoxFor(model => model.YaziKonusu, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Onay Durumu")
+                    @Html.DropDownListFor(model => model.OnayDurumu, new SelectList(new[] { "ONAY", "KOŞULLU ONAY", "EKSİKLİK", "RET", "BİLDİRİM" }), "Seçin", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Bakanlık Yazı")
+                    @Html.TextBoxFor(model => model.BakanlikYazi, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Bakanlık Yazı Tarihi")
+                    @Html.TextBoxFor(model => model.BakanlikYaziTarihi, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Cevaplanması Gereken Son Tarih")
+                    @Html.TextBoxFor(model => model.CevapSonTarih, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Yazı Cevabı")
+                    @Html.DropDownListFor(model => model.YaziCevabi, new SelectList(new[] { "Beklemede", "Gönderildi" }), "Seçin", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Cevaplandığı Tarih")
+                    @Html.TextBoxFor(model => model.CevaplandigiTarih, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Sorumlu Birim")
+                    @Html.TextBoxFor(model => model.SorumluBirim, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Ürün Sorumlusu")
+                    @Html.TextBoxFor(model => model.UrunSorumlusu, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    @Html.Label("Eksiklik Beklenilen Departman")
+                    @Html.TextBoxFor(model => model.EksiklikBeklenenDepartman, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Bekleme Nedeni")
+                    @Html.TextBoxFor(model => model.BeklemeNedeni, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <button type="submit">Ürün Ekle</button>
+        }
+    </div>
+</body>
+</html>

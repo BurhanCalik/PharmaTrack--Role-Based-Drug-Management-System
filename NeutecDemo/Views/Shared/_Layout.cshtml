@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .navbar {
+            background-color: #343a40;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .navbar-brand:hover {
+                transform: scale(1.1);
+            }
+
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-size: 1.1rem;
+            padding: 10px 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .navbar-nav .nav-link:hover {
+                background-color: #495057;
+                color: #ffffff;
+                border-radius: 5px;
+            }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f8f9fa;
+        }
+    </style>
+    <script>
+        function confirmLogout(event) {
+            event.preventDefault(); 
+            const confirmLogout = confirm("Çıkış yapmak istediğinize emin misiniz?");
+            if (confirmLogout) {
+                window.location.href = event.target.href; 
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark">
+        <div class="container">
+            @Html.ActionLink("Neutec Demo", "Index", "Product", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    title="Toggle navigation" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    @if (Session["UserRole"] != null)
+                    {
+                        string userRole = Session["UserRole"].ToString();
+
+                        if (userRole == "admin")
+                        {
+                            <li>@Html.ActionLink("Ürünler", "Index", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Ürün Ekle", "CreateProduct", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Ürün Düzenle", "UpdateProduct", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                        else if (userRole == "dataEntry")
+                        {
+                            <li>@Html.ActionLink("Ürünler", "Index", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Ürün Ekle", "CreateProduct", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                        else if (userRole == "dataViewer")
+                        {
+                            <li>@Html.ActionLink("Ürünler", "Index", "Product", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+
+                <li>
+                    <a href="@Url.Action("Logout", "Account")" class="nav-link" onclick="confirmLogout(event)">Çıkış</a>
+                </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

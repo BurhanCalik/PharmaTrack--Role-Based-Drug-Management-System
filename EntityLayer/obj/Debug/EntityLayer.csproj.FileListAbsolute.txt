@@ -1,0 +1,12 @@
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityLayer.dll.config
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityLayer.dll
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityLayer.pdb
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityFramework.dll
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityFramework.xml
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\obj\Debug\EntityLayer.csproj.AssemblyReference.cache
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\obj\Debug\EntityLayer.csproj.CoreCompileInputs.cache
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\obj\Debug\EntityLa.DA06A3F2.Up2Date
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\obj\Debug\EntityLayer.dll
+C:\Users\scadenza\source\repos\NeutecDemo\EntityLayer\obj\Debug\EntityLayer.pdb

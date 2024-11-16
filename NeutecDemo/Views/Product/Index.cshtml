@@ -1,0 +1,225 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<EntityLayer.Concrete.Product>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ürün Listesi</title>
+    <style>
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        .search-box {
+            margin: 20px 0;
+        }
+
+            .search-box input {
+                padding: 10px;
+                font-size: 16px;
+                width: 300px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+    </style>
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("productTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Ürün Listesi</h2>
+        <hr />
+        @if (TempData["SuccessMessage4"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage4"]
+            </div>
+        }
+        <div class="button-container">
+            <form method="get" action="@Url.Action("Index")">
+                <input type="hidden" name="showTable" value="true" />
+                <button type="submit">Ürünleri Getir</button>
+            </form>
+        </div>
+
+        @if (ViewBag.ShowTable)
+        {
+            <div class="search-box">
+                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Ürün ismi ara...">
+            </div>
+
+            <table id="productTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Ürün Adı</th>
+                    <th>Marka</th>
+                    <th>Marka Geçmişi</th>
+                    <th>Marka Tescil Durumu</th>
+                    <th>Ruhsatlı/Ruhsatsız</th>
+                    <th>Modul Tipi</th>
+                    <th>Etkin Madde</th>
+                    <th>Doz</th>
+                    <th>Farmasötik Form</th>
+                    <th>SGK Durumu</th>
+                    <th>Satış İzni</th>
+                    <th>Titck Birim</th>
+                    <th>Yazı Konusu</th>
+                    <th>Onay Durumu</th>
+                    <th>Bakanlık Yazı</th>
+                    <th>Bakanlık Yazı Tarihi</th>
+                    <th>Cevaplanması Gereken Son Tarih</th>
+                    <th>Yazı Cevabı</th>
+                    <th>Cevaplandığı Tarih</th>
+                    <th>Sorumlu Birim</th>
+                    <th>Ürün Sorumlusu</th>
+                    <th>Eksiklik Beklenen Departman</th>
+                    <th>Bekleme Nedeni</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Brand</td>
+                        <td>@item.BrandHistory</td>
+                        <td>@item.RegisterStatus</td>
+                        <td>@item.LicenseStatus</td>
+                        <td>@item.ModulTipi</td>
+                        <td>@item.EtkinMadde</td>
+                        <td>@item.Doz</td>
+                        <td>@item.FarmasotikForm</td>
+                        <td>@item.SgkDurumu</td>
+                        <td>@item.SatisIzni</td>
+                        <td>@item.TitckBirim</td>
+                        <td>@item.YaziKonusu</td>
+                        <td>@item.OnayDurumu</td>
+                        <td>@item.BakanlikYazi</td>
+                        <td>@item.BakanlikYaziTarihi</td>
+                        <td>@item.CevapSonTarih</td>
+                        <td>@item.YaziCevabi</td>
+                        <td>@item.CevaplandigiTarih</td>
+                        <td>@item.SorumluBirim</td>
+                        <td>@item.UrunSorumlusu</td>
+                        <td>@item.EksiklikBeklenenDepartman</td>
+                        <td>@item.BeklemeNedeni</td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <div></div>
+        }
+    </div>
+    <br />
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["SuccessMessage2"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["SuccessMessage2"]
+        </div>
+    }
+    @if (TempData["SuccessMessage3"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["SuccessMessage3"]
+        </div>
+    }
+</body>
+
+</html>

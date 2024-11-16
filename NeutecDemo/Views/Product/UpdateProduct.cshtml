@@ -1,0 +1,298 @@
+﻿@model EntityLayer.Concrete.Product
+@{
+    ViewBag.Title = "UpdateProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1 1 calc(33.333% - 20px);
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: #555;
+            }
+
+            .form-group input[type="text"], .form-group input[type="number"], .form-group input[type="date"] {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+                .form-group input[type="text"]:focus, .form-group input[type="number"]:focus, .form-group input[type="date"]:focus {
+                    border-color: #4CAF50;
+                    outline: none;
+                }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .button-container input[type="submit"], .button-container button {
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 0 10px;
+                color: #fff;
+            }
+
+        .update-button {
+            background-color: #4CAF50;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+        }
+
+        .btn-confirm {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+            .btn-confirm:hover {
+                background-color: #45a049;
+            }
+    </style>
+
+    <script>
+        function formatDateToInputFormat(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('.');
+            if (parts.length === 3) {
+                const day = parts[0].padStart(2, '0');
+                const month = parts[1].padStart(2, '0');
+                const year = parts[2];
+                return `${year}-${month}-${day}`;
+            }
+            return '';
+        }
+
+        function getProductDetails() {
+            var productId = document.getElementById("productIdInput").value;
+            var productName = document.getElementById("productNameInput").value;
+
+            if (productId && productName) {
+                fetch(`/Product/GetProduct?id=${productId}&name=${productName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data) {
+                            document.getElementById("ProductId").value = data.ProductId || '';
+                            document.getElementById("ProductName").value = data.ProductName || '';
+                            document.getElementById("Brand").value = data.Brand || '';
+                            document.getElementById("BrandHistory").value = data.BrandHistory || '';
+                            document.getElementById("LicenseStatus").value = data.LicenseStatus || '';
+                            document.getElementById("RegisterStatus").value = data.RegisterStatus || '';
+                            document.getElementById("ModulTipi").value = data.ModulTipi || '';
+                            document.getElementById("EtkinMadde").value = data.EtkinMadde || '';
+                            document.getElementById("Doz").value = data.Doz || '';
+                            document.getElementById("FarmasotikForm").value = data.FarmasotikForm || '';
+                            document.getElementById("SgkDurumu").value = data.SgkDurumu || '';
+                            document.getElementById("SatisIzni").value = data.SatisIzni || '';
+                            document.getElementById("TitckBirim").value = data.TitckBirim || '';
+                            document.getElementById("YaziKonusu").value = data.YaziKonusu || '';
+                            document.getElementById("OnayDurumu").value = data.OnayDurumu || '';
+                            document.getElementById("BakanlikYazi").value = data.BakanlikYazi || '';
+                            document.getElementById("BakanlikYaziTarihi").value = formatDateToInputFormat(data.BakanlikYaziTarihi) || '';
+                            document.getElementById("CevapSonTarih").value = formatDateToInputFormat(data.CevapSonTarih) || '';
+                            document.getElementById("YaziCevabi").value = data.YaziCevabi || '';
+                            document.getElementById("CevaplandigiTarih").value = formatDateToInputFormat(data.CevaplandigiTarih) || '';
+                            document.getElementById("SorumluBirim").value = data.SorumluBirim || '';
+                            document.getElementById("UrunSorumlusu").value = data.UrunSorumlusu || '';
+                            document.getElementById("EksiklikBeklenenDepartman").value = data.EksiklikBeklenenDepartman || '';
+                            document.getElementById("BeklemeNedeni").value = data.BeklemeNedeni || '';
+
+                            document.getElementById("productDetails").style.display = "block";
+                        } else {
+                            alert("Ürün bulunamadı.");
+                        }
+                    })
+                    .catch(error => console.error("Hata:", error));
+            } else {
+                alert("Lütfen ürün ID ve ismini girin.");
+            }
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Ürün Güncelle</h2>
+
+        <div class="form-group">
+            <label>Ürün ID</label>
+            <input type="text" id="productIdInput" />
+        </div>
+        <div class="form-group">
+            <label>Ürün İsmi</label>
+            <input type="text" id="productNameInput" />
+        </div>
+        <div class="button-container">
+            <button type="button" id="buttonUrunGetir" onclick="getProductDetails()" class="btn-confirm">Ürünü Getir</button>
+        </div>
+
+        <div id="productDetails" style="display:none;">
+            <hr />
+            @using (Html.BeginForm("UpdateProduct", "Product", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ürün ID</label>
+                        @Html.TextBoxFor(m => m.ProductId, new { @id = "ProductId", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <label>Ürün İsmi</label>
+                        @Html.TextBoxFor(m => m.ProductName, new { @id = "ProductName" })
+                    </div>
+                    <div class="form-group">
+                        <label>Marka</label>
+                        @Html.TextBoxFor(m => m.Brand, new { @id = "Brand" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Marka Geçmişi</label>
+                        @Html.TextBoxFor(m => m.BrandHistory, new { @id = "BrandHistory" })
+                    </div>
+                    <div class="form-group">
+                        <label>Ruhsat Durumu</label>
+                        @Html.TextBoxFor(m => m.LicenseStatus, new { @id = "LicenseStatus" })
+                    </div>
+                    <div class="form-group">
+                        <label>Tescil Durumu</label>
+                        @Html.TextBoxFor(m => m.RegisterStatus, new { @id = "RegisterStatus" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modül Tipi</label>
+                        @Html.TextBoxFor(m => m.ModulTipi, new { @id = "ModulTipi" })
+                    </div>
+                    <div class="form-group">
+                        <label>Etkin Madde</label>
+                        @Html.TextBoxFor(m => m.EtkinMadde, new { @id = "EtkinMadde" })
+                    </div>
+                    <div class="form-group">
+                        <label>Doz</label>
+                        @Html.TextBoxFor(m => m.Doz, new { @id = "Doz" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Farmasötik Form</label>
+                        @Html.TextBoxFor(m => m.FarmasotikForm, new { @id = "FarmasotikForm" })
+                    </div>
+                    <div class="form-group">
+                        <label>SGK Durumu</label>
+                        @Html.TextBoxFor(m => m.SgkDurumu, new { @id = "SgkDurumu" })
+                    </div>
+                    <div class="form-group">
+                        <label>Satış İzni</label>
+                        @Html.TextBoxFor(m => m.SatisIzni, new { @id = "SatisIzni" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>TİTCK Birim</label>
+                        @Html.TextBoxFor(m => m.TitckBirim, new { @id = "TitckBirim" })
+                    </div>
+                    <div class="form-group">
+                        <label>Yazı Konusu</label>
+                        @Html.TextBoxFor(m => m.YaziKonusu, new { @id = "YaziKonusu" })
+                    </div>
+                    <div class="form-group">
+                        <label>Onay Durumu</label>
+                        @Html.TextBoxFor(m => m.OnayDurumu, new { @id = "OnayDurumu" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bakanlık Yazı</label>
+                        @Html.TextBoxFor(m => m.BakanlikYazi, new { @id = "BakanlikYazi" })
+                    </div>
+                    <div class="form-group">
+                        <label>Bakanlık Yazı Tarihi</label>
+                        @Html.TextBoxFor(m => m.BakanlikYaziTarihi, new { @id = "BakanlikYaziTarihi", type = "date" })
+                    </div>
+                    <div class="form-group">
+                        <label>Cevaplanması Gereken Son Tarih</label>
+                        @Html.TextBoxFor(m => m.CevapSonTarih, new { @id = "CevapSonTarih", type = "date" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Yazı Cevabı</label>
+                        @Html.TextBoxFor(m => m.YaziCevabi, new { @id = "YaziCevabi" })
+                    </div>
+                    <div class="form-group">
+                        <label>Cevaplandığı Tarih</label>
+                        @Html.TextBoxFor(m => m.CevaplandigiTarih, new { @id = "CevaplandigiTarih", type = "date" })
+                    </div>
+                    <div class="form-group">
+                        <label>Sorumlu Birim</label>
+                        @Html.TextBoxFor(m => m.SorumluBirim, new { @id = "SorumluBirim" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ürün Sorumlusu</label>
+                        @Html.TextBoxFor(m => m.UrunSorumlusu, new { @id = "UrunSorumlusu" })
+                    </div>
+                    <div class="form-group">
+                        <label>Eksiklik Beklenen Departman</label>
+                        @Html.TextBoxFor(m => m.EksiklikBeklenenDepartman, new { @id = "EksiklikBeklenenDepartman" })
+                    </div>
+                    <div class="form-group">
+                        <label>Bekleme Nedeni</label>
+                        @Html.TextBoxFor(m => m.BeklemeNedeni, new { @id = "BeklemeNedeni" })
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <input type="submit" formaction="@Url.Action("UpdateProduct", "Product") "value="Güncelle" class="update-button" />
+                    <form asp-action="DeleteProduct" method="post" style="display:inline;" id="deleteForm" >
+                        @Html.Hidden("ProductId", Model.ProductId)
+                        <button type="submit" formaction="@Url.Action("DeleteProduct", "Product")" class="delete-button">Sil</button>
+                    </form>
+                </div>
+                
+            }
+        </div>
+    </div>
+</body>
+</html>
